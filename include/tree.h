@@ -6,33 +6,34 @@
 
 class PMTree {
  private:
-  struct Node {
-    char simvol;
-    std::vector<Node*> childUzel;
+    struct Uzel {
+        char simvol;
+        std::vector<Uzel*> potomki;
         
-    Node(char sim) : simvol(sim) {}
-    ~Node() {
-      for (Node* child : childUzel) {
-        delete child;
-      }
-    }
-  };
+        Uzel(char sim) : simvol(sim) {}
+        ~Uzel() {
+            for (Uzel* potomok : potomki) {
+                delete potomok;
+            }
+        }
+    };
 
-  Node* root;
-  int kol_perestanovok;
+    Uzel* koren;
+    int vsego_perestanovok;
 
-  void building(Node* parent, const std::vector<char>& komponents);
-  int factorials(int n) const;
+    void stroitDerevo(Uzel* roditel, const std::vector<char>& elementi);
+    int vichislitFactorial(int n) const;
 
  public:
-  explicit PMTree(const std::vector<char>& komponents);
-  ~PMTree();
+    explicit PMTree(const std::vector<char>& elementi);
+    ~PMTree();
 
-  int getKolPerestanovki() const { return kol_perestanovok; }
-  Node* getRoot() const { return root; }
-}
-std::vector<std::vector<char>> getAllPerms(const PMTree& tree);
-std::vector<char> getPerm1(const PMTree& tree, int num);
-std::vector<char> getPerm2(const PMTree& tree, int num);
+    int poluchitVsegoPerestanovok() const { return vsego_perestanovok; }
+    Uzel* poluchitKoren() const { return koren; }
+};
+
+std::vector<std::vector<char>> poluchitVsePerestanovki(const PMTree& derevo);
+std::vector<char> poluchitPerestanovku1(const PMTree& derevo, int nomer);
+std::vector<char> poluchitPerestanovku2(const PMTree& derevo, int nomer);
 
 #endif  // INCLUDE_TREE_H_
