@@ -32,8 +32,8 @@ class PMTree {
     Uzel* poluchitKoren() const { return koren; }
 };
 
-std::vector<std::vector<char>> poluchitVsePerestanovki(const PMTree& derevo);
-std::vector<char> poluchitPerestanovku1(const PMTree& derevo, int nomer);
-std::vector<char> poluchitPerestanovku2(const PMTree& derevo, int nomer);
+std::vector<std::vector<char>> getAllPerms(const PMTree& derevo);
+std::vector<char> getPerm1(const PMTree& derevo, int nomer);
+std::vector<char> getPerm2(const PMTree& derevo, int nomer);
 
 #endif  // INCLUDE_TREE_H_
