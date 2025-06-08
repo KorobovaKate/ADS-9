@@ -4,69 +4,71 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "tree.h"
-static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel,
-                                     std::vector<char>& tekushaya,
-                                     std::vector<std::vector<char>>& rezultat) {
-    tekushaya.push_back(uzel->simvol);
+#include "tree.h"
+#include <algorithm>
+
+static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel, 
+                                      std::vector<char>& current,
+                                      std::vector<std::vector<char>>& result) {
+    current.push_back(uzel->simvol);
     
-    if (uzel->potomki.empty()) {
-        rezultat.push_back(tekushaya);
+    if (uzel->childUzel.empty()) {
+        result.push_back(current);
     } else {
-        for (const auto& potomok : uzel->potomki) {
-            rekursivnySborPerestanovok(potomok, tekushaya, rezultat);
+        for (const auto& child : uzel->childUzel) {
+            rekursivnySborPerestanovok(child, current, result);
         }
     }
     
-    tekushaya.pop_back();
+    current.pop_back();
 }
 
-PMTree::PMTree(const std::vector<char>& elementi) : koren(nullptr), vsego_perestanovok(0) {
-    if (elementi.empty()) return;
+PMTree::PMTree(const std::vector<char>& elements) : root(nullptr), kol_perestanovok(0) {
+    if (elements.empty()) return;
     
-    vsego_perestanovok = vichislitFactorial(elementi.size());
-    koren = new Uzel('\0');
+    kol_perestanovok = factorial(elements.size());
+    root = new Uzel('\0'); // Фиктивный корень
     
-    for (char simvol : elementi) {
-        std::vector<char> ostavshiesya = elementi;
-        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), simvol), ostavshiesya.end());
+    for (char elem : elements) {
+        std::vector<char> ostavshiesya = elements;
+        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), elem), ostavshiesya.end());
         
-        Uzel* novyUzel = new Uzel(simvol);
-        stroitDerevo(novyUzel, ostavshiesya);
-        koren->potomki.push_back(novyUzel);
+        Uzel* child = new Uzel(elem);
+        buildTree(child, ostavshiesya);
+        root->childUzel.push_back(child);
     }
 }
 
 PMTree::~PMTree() {
-    delete koren;
+    delete root;
 }
 
-void PMTree::stroitDerevo(Uzel* roditel, const std::vector<char>& elementi) {
-    if (elementi.empty()) return;
+void PMTree::buildTree(Uzel* parent, const std::vector<char>& elements) {
+    if (elements.empty()) return;
     
-    for (char simvol : elementi) {
-        std::vector<char> ostavshiesya = elementi;
-        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), simvol), ostavshiesya.end());
+    for (char elem : elements) {
+        std::vector<char> ostavshiesya = elements;
+        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), elem), ostavshiesya.end());
         
-        Uzel* novyUzel = new Uzel(simvol);
-        stroitDerevo(novyUzel, ostavshiesya);
-        roditel->potomki.push_back(novyUzel);
+        Uzel* child = new Uzel(elem);
+        buildTree(child, ostavshiesya);
+        parent->childUzel.push_back(child);
     }
 }
 
-int PMTree::vichislitFactorial(int n) const {
-    return (n <= 1) ? 1 : n * vichislitFactorial(n - 1);
+int PMTree::factorial(int n) const {
+    return (n == 1 || n == 0) ? 1 : n * factorial(n - 1);
 }
 
-std::vector<std::vector<char>> getAllPerms(const PMTree& derevo) {
-    std::vector<std::vector<char>> rezultat;
-    if (!derevo.poluchitVsegoPerestanovok()) return rezultat;
+std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
+    std::vector<std::vector<char>> result;
+    if (!tree.getKolPerestanovok()) return result;
     
-    std::vector<char> tekushaya;
-    for (const auto& potomok : derevo.poluchitKoren()->potomki) {
-        rekursivnySborPerestanovok(potomok, tekushaya, rezultat);
+    std::vector<char> current;
+    for (const auto& child : tree.getRoot()->childUzel) {
+        rekursivnySborPerestanovok(child, current, result);
     }
-    return rezultat;
+    return result;
 }
 
 static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vector<char>& rezultat) {
@@ -74,11 +76,11 @@ static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vecto
     
     rezultat.push_back(uzel->simvol);
     
-    if (uzel->potomki.empty()) {
+    if (uzel->childUzel.empty()) {
         ostalos--;
     } else {
-        for (const auto& potomok : uzel->potomki) {
-            poiskPerestanovki(potomok, ostalos, rezultat);
+        for (const auto& child : uzel->childUzel) {
+            poiskPerestanovki(child, ostalos, rezultat);
             if (ostalos < 0) break;
         }
     }
@@ -88,34 +90,31 @@ static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vecto
     }
 }
 
-std::vector<char> getPerm1(const PMTree& derevo, int nomer) {
+std::vector<char> getPerm1(const PMTree& tree, int num) {
     std::vector<char> rezultat;
-    if (nomer < 1 || nomer > derevo.poluchitVsegoPerestanovok()) return rezultat;
+    if (num < 1 || num > tree.getKolPerestanovok()) return rezultat;
     
-    int ostalos = nomer - 1;
-    for (const auto& potomok : derevo.poluchitKoren()->potomki) {
-        poiskPerestanovki(potomok, ostalos, rezultat);
+    int ostalos = num - 1;
+    for (const auto& child : tree.getRoot()->childUzel) {
+        poiskPerestanovki(child, ostalos, rezultat);
         if (ostalos < 0) break;
     }
     return rezultat;
 }
 
-std::vector<char> getPerm2(const PMTree& derevo, int nomer) {
+std::vector<char> getPerm2(const PMTree& tree, int num) {
     std::vector<char> rezultat;
-    const int vsego = derevo.poluchitVsegoPerestanovok();
+    if (num < 1 || num > tree.getKolPerestanovok()) return rezultat;
     
-    if (nomer < 1 || nomer > vsego) return rezultat;
+    int ostalos = num - 1;
+    const PMTree::Uzel* tekushiy = tree.getRoot();
     
-    int ostalos = nomer - 1;
-    const PMTree::Uzel* tekushiy = derevo.poluchitKoren();
-    
-    while (!tekushiy->potomki.empty()) {
-        int kolichestvo_potomkov = tekushiy->potomki.size();
-        int razmer_poddereva = vsego / kolichestvo_potomkov;
-        int indeks = ostalos / razmer_poddereva;
-        ostalos = ostalos % razmer_poddereva;
+    while (!tekushiy->childUzel.empty()) {
+        int razmer_podder = tree.factorial(tekushiy->childUzel.size() - 1);
+        int index = ostalos / razmer_podder;
+        ostalos = ostalos % razmer_podder;
         
-        tekushiy = tekushiy->potomki[indeks];
+        tekushiy = tekushiy->childUzel[index];
         rezultat.push_back(tekushiy->simvol);
     }
     
