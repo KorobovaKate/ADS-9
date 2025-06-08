@@ -1,11 +1,12 @@
 // Copyright 2022 NNTU-CS
-
+#include "tree.h"
 #include  <iostream>
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include "tree.h"
+
 #include <algorithm>
+#include <vector>
 
 static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel,
                                       std::vector<char>& current,
