@@ -75,22 +75,24 @@ void runPerformanceExperiment() {
             auto perm = getPerm1(tree, num);
         }
         end = chrono::high_resolution_clock::now();
-        auto get1_time = chrono::duration_cast<chrono::microseconds>(end - start).count() / num_tests;
+        auto get1_time = chrono::duration_cast<chrono::microseconds>
+            (end - start).count() / num_tests;
         
         start = chrono::high_resolution_clock::now();
         for (int num : test_numbers) {
             auto perm = getPerm2(tree, num);
         }
         end = chrono::high_resolution_clock::now();
-        auto get2_time = chrono::duration_cast<chrono::microseconds>(end - start).count() / num_tests;
-        
+        auto get2_time = chrono::duration_cast<chrono::microseconds>
+            (end - start).count() / num_tests;
+    
         data_file << n << "," << get_all_time << "," << get1_time << "," << get2_time << "\n";
-        
+    
         cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
              << "getPerm1 = " << get1_time << " μs,\t"
              << "getPerm2 = " << get2_time << " μs\n";
     }
-    
+
     data_file.close();
     cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
     cout << "=== Эксперимент завершен ===\n\n";
@@ -98,8 +100,8 @@ void runPerformanceExperiment() {
 
 int main() {
     demonstratePermutations();
-    
+
     runPerformanceExperiment();
-    
+
     return 0;
 }
