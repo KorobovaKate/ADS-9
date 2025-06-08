@@ -23,12 +23,13 @@ class PMTree {
     int kol_perestanovok;
 
     void buildTree(Uzel* parent, const std::vector<char>& elements);
-    int factorial(int n) const;
+    
  
  public:
     explicit PMTree(const std::vector<char>& elements);
     ~PMTree();
 
+    int factorial(int n) const;
     int getKolPerestanovok() const { return kol_perestanovok; }
     Uzel* getRoot() const { return root; }
 };
