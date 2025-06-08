@@ -7,11 +7,11 @@
 #include "tree.h"
 #include <algorithm>
 
-static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel, 
+static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel,
                                       std::vector<char>& current,
                                       std::vector<std::vector<char>>& result) {
     current.push_back(uzel->simvol);
-    
+
     if (uzel->childUzel.empty()) {
         result.push_back(current);
     } else {
@@ -19,20 +19,22 @@ static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel,
             rekursivnySborPerestanovok(child, current, result);
         }
     }
-    
+
     current.pop_back();
 }
 
-PMTree::PMTree(const std::vector<char>& elements) : root(nullptr), kol_perestanovok(0) {
+PMTree::PMTree(const std::vector<char>& elements)
+  : root(nullptr), kol_perestanovok(0) {
     if (elements.empty()) return;
-    
+
     kol_perestanovok = factorial(elements.size());
     root = new Uzel('\0'); // Фиктивный корень
-    
+
     for (char elem : elements) {
         std::vector<char> ostavshiesya = elements;
-        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), elem), ostavshiesya.end());
-        
+        ostavshiesya.erase(std::remove(ostavshiesya.begin(),
+          ostavshiesya.end(), elem), ostavshiesya.end());
+
         Uzel* child = new Uzel(elem);
         buildTree(child, ostavshiesya);
         root->childUzel.push_back(child);
@@ -45,11 +47,12 @@ PMTree::~PMTree() {
 
 void PMTree::buildTree(Uzel* parent, const std::vector<char>& elements) {
     if (elements.empty()) return;
-    
+
     for (char elem : elements) {
         std::vector<char> ostavshiesya = elements;
-        ostavshiesya.erase(std::remove(ostavshiesya.begin(), ostavshiesya.end(), elem), ostavshiesya.end());
-        
+        ostavshiesya.erase(std::remove(ostavshiesya.begin(),
+          ostavshiesya.end(), elem), ostavshiesya.end());
+
         Uzel* child = new Uzel(elem);
         buildTree(child, ostavshiesya);
         parent->childUzel.push_back(child);
@@ -63,7 +66,7 @@ int PMTree::factorial(int n) const {
 std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
     std::vector<std::vector<char>> result;
     if (!tree.getKolPerestanovok()) return result;
-    
+
     std::vector<char> current;
     for (const auto& child : tree.getRoot()->childUzel) {
         rekursivnySborPerestanovok(child, current, result);
@@ -71,11 +74,12 @@ std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
     return result;
 }
 
-static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vector<char>& rezultat) {
+static void poiskPerestanovki(const PMTree::Uzel* uzel,
+  int& ostalos, std::vector<char>& rezultat) {
     if (ostalos < 0) return;
-    
+
     rezultat.push_back(uzel->simvol);
-    
+
     if (uzel->childUzel.empty()) {
         ostalos--;
     } else {
@@ -84,7 +88,7 @@ static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vecto
             if (ostalos < 0) break;
         }
     }
-    
+
     if (ostalos >= 0) {
         rezultat.pop_back();
     }
@@ -93,7 +97,7 @@ static void poiskPerestanovki(const PMTree::Uzel* uzel, int& ostalos, std::vecto
 std::vector<char> getPerm1(const PMTree& tree, int num) {
     std::vector<char> rezultat;
     if (num < 1 || num > tree.getKolPerestanovok()) return rezultat;
-    
+
     int ostalos = num - 1;
     for (const auto& child : tree.getRoot()->childUzel) {
         poiskPerestanovki(child, ostalos, rezultat);
@@ -105,18 +109,18 @@ std::vector<char> getPerm1(const PMTree& tree, int num) {
 std::vector<char> getPerm2(const PMTree& tree, int num) {
     std::vector<char> rezultat;
     if (num < 1 || num > tree.getKolPerestanovok()) return rezultat;
-    
+
     int ostalos = num - 1;
     const PMTree::Uzel* tekushiy = tree.getRoot();
-    
+
     while (!tekushiy->childUzel.empty()) {
         int razmer_podder = tree.factorial(tekushiy->childUzel.size() - 1);
         int index = ostalos / razmer_podder;
         ostalos = ostalos % razmer_podder;
-        
+
         tekushiy = tekushiy->childUzel[index];
         rezultat.push_back(tekushiy->simvol);
     }
-    
+
     return rezultat;
 }
