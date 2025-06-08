@@ -9,6 +9,7 @@
 #include <vector>
 
 
+using namespace std;
 
 void demonstratePermutations() {
     cout << "=== Пример работы с деревом перестановок ===\n\n";
