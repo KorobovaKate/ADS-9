@@ -1,5 +1,4 @@
 // Copyright 2022 NNTU-CS
-// Copyright 2022 NNTU-CS
 #include "tree.h"
 
 #include <chrono>
@@ -9,36 +8,36 @@
 #include <vector>
 
 
-using namespace std;
+
 
 void demonstratePermutations() {
-    cout << "=== Пример работы с деревом перестановок ===\n\n";
+    std::cout << "=== Пример работы с деревом перестановок ===\n\n";
 
     vector<char> elements = {'1', '2', '3'};
     PMTree tree(elements);
 
-    cout << "Все перестановки для {1,2,3}:\n";
+    std::cout << "Все перестановки для {1,2,3}:\n";
     auto all_perms = getAllPerms(tree);
     for (const auto& perm : all_perms) {
         for (char c : perm) cout << c;
-        cout << " ";
+        std::cout << " ";
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
 
-    cout << "Получение перестановок по номеру:\n";
+    std::cout << "Получение перестановок по номеру:\n";
     for (int i = 1; i <= 6; ++i) {
         auto perm1 = getPerm1(tree, i);
         auto perm2 = getPerm2(tree, i);
-        cout << "Пер. #" << i << ": ";
+        std::cout << "Пер. #" << i << ": ";
         for (char c : perm1) cout << c;
-        cout << " (метод1), ";
+        std::cout << " (метод1), ";
         for (char c : perm2) cout << c;
-        cout << " (метод2)\n";
+        std::cout << " (метод2)\n";
     }
-    cout << "\n";
+    std::cout << "\n";
 }
 void runPerformanceExperiment() {
-    cout << "=== Начало вычислительного эксперимента ===\n";
+    std::cout << "=== Начало вычислительного эксперимента ===\n";
 
     ofstream data_file("result/experiment.csv");
     data_file << "n,getAllTime,getPerm1Time,getPerm2Time\n";
@@ -47,7 +46,6 @@ void runPerformanceExperiment() {
     mt19937 gen(rd());
 
     for (int n = 1; n <= 10; ++n) {
-        // Создаем входные данные
         vector<char> elements(n);
         for (int i = 0; i < n; ++i) {
             elements[i] = 'a' + i;
@@ -94,14 +92,14 @@ void runPerformanceExperiment() {
         data_file << n << "," << get_all_time << ","
             << get1_time << "," << get2_time << "\n";
 
-        cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
+        std::cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
              << "getPerm1 = " << get1_time << " μs,\t"
              << "getPerm2 = " << get2_time << " μs\n";
     }
 
     data_file.close();
-    cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
-    cout << "=== Эксперимент завершен ===\n\n";
+    std::cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
+    std::cout << "=== Эксперимент завершен ===\n\n";
 }
 
 int main() {
