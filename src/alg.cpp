@@ -1,5 +1,5 @@
 // Copyright 2022 NNTU-CS
-#include "tree.h"
+
 
 #include <cstdlib>
 
@@ -9,6 +9,8 @@
 #include <iostream>
 #include <locale>
 #include <vector>
+
+#include "tree.h"
 
 static void rekursivnySborPerestanovok(const PMTree::Uzel* uzel,
                                       std::vector<char>& current,
