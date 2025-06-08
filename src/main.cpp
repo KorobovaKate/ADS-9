@@ -1,12 +1,10 @@
 // Copyright 2022 NNTU-CS
 #include "tree.h"
-#include <iostream>
-#include <vector>
 #include <chrono>
-#include <random>
 #include <fstream>
-
-using namespace std;
+#include <iostream>
+#include <random>
+#include <vector>
 
 void demonstratePermutations() {
     std::cout << "=== Пример работы с деревом перестановок ===\n\n";
@@ -58,7 +56,7 @@ void runPerformanceExperiment() {
 
         int total_perms = tree.getKolPerestanovok();
         if (total_perms == 0) continue;
-  
+
         start = chrono::high_resolution_clock::now();
         auto all_perms = getAllPerms(tree);
         end = chrono::high_resolution_clock::now();
@@ -71,7 +69,6 @@ void runPerformanceExperiment() {
         for (int& num : test_numbers) {
             num = dist(gen);
         }
- 
         start = chrono::high_resolution_clock::now();
         for (int num : test_numbers) {
             auto perm = getPerm1(tree, num);
@@ -88,7 +85,7 @@ void runPerformanceExperiment() {
         auto get2_time = chrono::duration_cast<chrono::microseconds>
             (end - start).count() / num_tests;
 
-        data_file << n << "," << get_all_time << "," 
+        data_file << n << "," << get_all_time << ","
             << get1_time << "," << get2_time << "\n";
 
         std::cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
@@ -97,7 +94,7 @@ void runPerformanceExperiment() {
     }
 
     data_file.close();
-    std::cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
+    std::cout << "\nРезультаты сохранены в result/experiment.csv\n";
     std::cout << "=== Эксперимент завершен ===\n\n";
 }
 
