@@ -9,7 +9,7 @@ class PMTree {
     struct Uzel {
         char simvol;
         std::vector<Uzel*> childUzel;
- 
+
         explicit Uzel(char val) : simvol(val) {}
         ~Uzel() {
             for (Uzel* child : childUzel) {
@@ -23,8 +23,7 @@ class PMTree {
     int kol_perestanovok;
 
     void buildTree(Uzel* parent, const std::vector<char>& elements);
-    
- 
+
  public:
     explicit PMTree(const std::vector<char>& elements);
     ~PMTree();
