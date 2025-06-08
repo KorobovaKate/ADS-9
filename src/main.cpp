@@ -1,11 +1,5 @@
 // Copyright 2022 NNTU-CS
-
-// Copyright 2022 NNTU-CS
 #include "tree.h"
-
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
 
 #include <chrono>
 #include <fstream>
@@ -58,7 +52,8 @@ void runPerformanceExperiment() {
         auto start = std::chrono::high_resolution_clock::now();
         PMTree tree(elements);
         auto end = std::chrono::high_resolution_clock::now();
-        auto build_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        auto build_time = std::chrono::duration_cast<std::chrono::microseconds>
+            (end - start).count();
 
         int total_perms = tree.getKolPerestanovok();
         if (total_perms == 0) continue;
@@ -66,7 +61,8 @@ void runPerformanceExperiment() {
         start = std::chrono::high_resolution_clock::now();
         auto all_perms = getAllPerms(tree);
         end = std::chrono::high_resolution_clock::now();
-        auto get_all_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        auto get_all_time = std::chrono::duration_cast<std::chrono::microseconds>
+            (end - start).count();
 
         std::uniform_int_distribution<> dist(1, total_perms);
         const int num_tests = 100;
@@ -80,14 +76,16 @@ void runPerformanceExperiment() {
             auto perm = getPerm1(tree, num);
         }
         end = std::chrono::high_resolution_clock::now();
-        auto get1_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / num_tests;
+        auto get1_time = std::chrono::duration_cast<std::chrono::microseconds>
+            (end - start).count() / num_tests;
 
         start = std::chrono::high_resolution_clock::now();
         for (int num : test_numbers) {
             auto perm = getPerm2(tree, num);
         }
         end = std::chrono::high_resolution_clock::now();
-        auto get2_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / num_tests;
+        auto get2_time = std::chrono::duration_cast<std::chrono::microseconds>
+            (end - start).count() / num_tests;
 
         data_file << n << "," << get_all_time << ","
                   << get1_time << "," << get2_time << "\n";
@@ -98,7 +96,7 @@ void runPerformanceExperiment() {
     }
 
     data_file.close();
-    std::cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
+    std::cout << "\nРезультаты сохранены в result/experiment.csv\n";
     std::cout << "=== Эксперимент завершен ===\n\n";
 }
 
