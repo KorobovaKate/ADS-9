@@ -1,11 +1,11 @@
 // Copyright 2022 NNTU-CS
-#include "tree.h"
-
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <vector>
+
+#include "tree.h"
 
 void demonstratePermutations() {
     std::cout << "=== Пример работы с деревом перестановок ===\n\n";
@@ -61,8 +61,8 @@ void runPerformanceExperiment() {
         start = std::chrono::high_resolution_clock::now();
         auto all_perms = getAllPerms(tree);
         end = std::chrono::high_resolution_clock::now();
-        auto get_all_time = std::chrono::duration_cast<std::chrono::microseconds>
-            (end - start).count();
+        auto get_all_time = std::chrono::duration_cast
+            <std::chrono::microseconds>(end - start).count();
 
         std::uniform_int_distribution<> dist(1, total_perms);
         const int num_tests = 100;
