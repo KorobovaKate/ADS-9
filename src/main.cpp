@@ -7,8 +7,7 @@
 #include <random>
 #include <vector>
 
-
-
+using namespace std::cout;
 
 void demonstratePermutations() {
     std::cout << "=== Пример работы с деревом перестановок ===\n\n";
