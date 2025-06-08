@@ -5,35 +5,36 @@
 #include <vector>
 
 class PMTree {
- private:
+public:
     struct Uzel {
         char simvol;
-        std::vector<Uzel*> potomki;
+        std::vector<Uzel*> childUzel;
         
-        Uzel(char sim) : simvol(sim) {}
+        Uzel(char val) : simvol(val) {}
         ~Uzel() {
-            for (Uzel* potomok : potomki) {
-                delete potomok;
+            for (Uzel* child : childUzel) {
+                delete child;
             }
         }
     };
 
-    Uzel* koren;
-    int vsego_perestanovok;
-
-    void stroitDerevo(Uzel* roditel, const std::vector<char>& elementi);
-    int vichislitFactorial(int n) const;
-
- public:
-    explicit PMTree(const std::vector<char>& elementi);
+private:
+    Uzel* root;
+    int kol_perestanovok;
+    
+    void buildTree(Uzel* parent, const std::vector<char>& elements);
+    int factorial(int n) const;
+    
+public:
+    explicit PMTree(const std::vector<char>& elements);
     ~PMTree();
-
-    int poluchitVsegoPerestanovok() const { return vsego_perestanovok; }
-    Uzel* poluchitKoren() const { return koren; }
+    
+    int getKolPerestanovok() const { return kol_perestanovok; }
+    Uzel* getRoot() const { return root; }
 };
 
-std::vector<std::vector<char>> getAllPerms(const PMTree& derevo);
-std::vector<char> getPerm1(const PMTree& derevo, int nomer);
-std::vector<char> getPerm2(const PMTree& derevo, int nomer);
+std::vector<std::vector<char>> getAllPerms(const PMTree& tree);
+std::vector<char> getPerm1(const PMTree& tree, int num);
+std::vector<char> getPerm2(const PMTree& tree, int num);
 
 #endif  // INCLUDE_TREE_H_
