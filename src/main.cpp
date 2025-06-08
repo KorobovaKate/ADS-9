@@ -10,33 +10,33 @@
 using namespace std::cout;
 
 void demonstratePermutations() {
-    std::cout << "=== Пример работы с деревом перестановок ===\n\n";
+    cout << "=== Пример работы с деревом перестановок ===\n\n";
 
     vector<char> elements = {'1', '2', '3'};
     PMTree tree(elements);
 
-    std::cout << "Все перестановки для {1,2,3}:\n";
+    cout << "Все перестановки для {1,2,3}:\n";
     auto all_perms = getAllPerms(tree);
     for (const auto& perm : all_perms) {
         for (char c : perm) cout << c;
-        std::cout << " ";
+        cout << " ";
     }
-    std::cout << "\n\n";
+    cout << "\n\n";
 
-    std::cout << "Получение перестановок по номеру:\n";
+    cout << "Получение перестановок по номеру:\n";
     for (int i = 1; i <= 6; ++i) {
         auto perm1 = getPerm1(tree, i);
         auto perm2 = getPerm2(tree, i);
-        std::cout << "Пер. #" << i << ": ";
+        cout << "Пер. #" << i << ": ";
         for (char c : perm1) cout << c;
-        std::cout << " (метод1), ";
+        cout << " (метод1), ";
         for (char c : perm2) cout << c;
-        std::cout << " (метод2)\n";
+        cout << " (метод2)\n";
     }
-    std::cout << "\n";
+    cout << "\n";
 }
 void runPerformanceExperiment() {
-    std::cout << "=== Начало вычислительного эксперимента ===\n";
+    cout << "=== Начало вычислительного эксперимента ===\n";
 
     ofstream data_file("result/experiment.csv");
     data_file << "n,getAllTime,getPerm1Time,getPerm2Time\n";
@@ -91,14 +91,14 @@ void runPerformanceExperiment() {
         data_file << n << "," << get_all_time << ","
             << get1_time << "," << get2_time << "\n";
 
-        std::cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
+        cout << "n = " << n << ":\tgetAll = " << get_all_time << " μs,\t"
              << "getPerm1 = " << get1_time << " μs,\t"
              << "getPerm2 = " << get2_time << " μs\n";
     }
 
     data_file.close();
-    std::cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
-    std::cout << "=== Эксперимент завершен ===\n\n";
+    cout << "\nРезультаты эксперимента сохранены в result/experiment.csv\n";
+    cout << "=== Эксперимент завершен ===\n\n";
 }
 
 int main() {
