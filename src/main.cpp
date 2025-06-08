@@ -8,14 +8,14 @@
 #include <random>
 #include <vector>
 
-using namespace std;
+
 
 void demonstratePermutations() {
     cout << "=== Пример работы с деревом перестановок ===\n\n";
-    
+
     vector<char> elements = {'1', '2', '3'};
     PMTree tree(elements);
-    
+
     cout << "Все перестановки для {1,2,3}:\n";
     auto all_perms = getAllPerms(tree);
     for (const auto& perm : all_perms) {
@@ -23,7 +23,7 @@ void demonstratePermutations() {
         cout << " ";
     }
     cout << "\n\n";
-    
+
     cout << "Получение перестановок по номеру:\n";
     for (int i = 1; i <= 6; ++i) {
         auto perm1 = getPerm1(tree, i);
@@ -38,40 +38,40 @@ void demonstratePermutations() {
 }
 void runPerformanceExperiment() {
     cout << "=== Начало вычислительного эксперимента ===\n";
-    
+
     ofstream data_file("result/experiment.csv");
     data_file << "n,getAllTime,getPerm1Time,getPerm2Time\n";
-    
+
     random_device rd;
     mt19937 gen(rd());
-    
+
     for (int n = 1; n <= 10; ++n) {
         // Создаем входные данные
         vector<char> elements(n);
         for (int i = 0; i < n; ++i) {
             elements[i] = 'a' + i;
         }
-        
+
         auto start = chrono::high_resolution_clock::now();
         PMTree tree(elements);
         auto end = chrono::high_resolution_clock::now();
         auto build_time = chrono::duration_cast<chrono::microseconds>(end - start).count();
-        
+
         int total_perms = tree.getKolPerestanovok();
         if (total_perms == 0) continue;
-        
+
         start = chrono::high_resolution_clock::now();
         auto all_perms = getAllPerms(tree);
         end = chrono::high_resolution_clock::now();
         auto get_all_time = chrono::duration_cast<chrono::microseconds>(end - start).count();
-        
+
         uniform_int_distribution<> dist(1, total_perms);
         const int num_tests = 100;
         vector<int> test_numbers(num_tests);
         for (int& num : test_numbers) {
             num = dist(gen);
         }
-        
+
         start = chrono::high_resolution_clock::now();
         for (int num : test_numbers) {
             auto perm = getPerm1(tree, num);
