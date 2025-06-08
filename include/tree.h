@@ -5,12 +5,12 @@
 #include <vector>
 
 class PMTree {
-public:
+ public:
     struct Uzel {
         char simvol;
         std::vector<Uzel*> childUzel;
-        
-        Uzel(char val) : simvol(val) {}
+ 
+        explicit Uzel(char val) : simvol(val) {}
         ~Uzel() {
             for (Uzel* child : childUzel) {
                 delete child;
@@ -18,17 +18,17 @@ public:
         }
     };
 
-private:
+ private:
     Uzel* root;
     int kol_perestanovok;
-    
+
     void buildTree(Uzel* parent, const std::vector<char>& elements);
     int factorial(int n) const;
-    
-public:
+ 
+ public:
     explicit PMTree(const std::vector<char>& elements);
     ~PMTree();
-    
+
     int getKolPerestanovok() const { return kol_perestanovok; }
     Uzel* getRoot() const { return root; }
 };
