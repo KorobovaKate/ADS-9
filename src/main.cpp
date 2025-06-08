@@ -55,16 +55,14 @@ void runPerformanceExperiment() {
         auto end = chrono::high_resolution_clock::now();
         auto build_time = chrono::duration_cast<chrono::microseconds>(end - start).count();
         
-        int total_perms = tree.getTotalPermutations();
+        int total_perms = tree.getKolPerestanovok();
         if (total_perms == 0) continue;
         
-        // Тестируем getAllPerms()
         start = chrono::high_resolution_clock::now();
         auto all_perms = getAllPerms(tree);
         end = chrono::high_resolution_clock::now();
         auto get_all_time = chrono::duration_cast<chrono::microseconds>(end - start).count();
         
-        // Тестируем getPerm1() и getPerm2() на случайных номерах
         uniform_int_distribution<> dist(1, total_perms);
         const int num_tests = 100;
         vector<int> test_numbers(num_tests);
